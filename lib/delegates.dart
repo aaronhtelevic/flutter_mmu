@@ -75,8 +75,10 @@ class _DelegatesState extends State<Delegates> {
                 } else {
                   final delegates = _parseDelegates(snapshot.data);
                   if (delegates != null) {
+                    double screenHeight = MediaQuery.of(context).size.height;
                     return SizedBox(
-                      height: 500.0, // Set the desired height
+                      height: screenHeight *
+                          0.5, // Set the height to 50% of the screen height
                       child: SingleChildScrollView(
                         child: DelegateTable(delegates: delegates),
                       ),
