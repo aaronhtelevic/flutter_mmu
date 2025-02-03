@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mmu/agenda.dart';
-import 'package:flutter_mmu/delegates.dart';
+import 'package:flutter_mmu/agenda_page.dart';
+import 'package:flutter_mmu/delegates_page.dart';
 import 'package:flutter_mmu/header.dart';
 
 void main() {
@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
               Expanded(
                 child: const TabBarView(
                   children: [
-                    Delegates(),
-                    Agenda(),
+                    DelegatesPage(),
+                    AgendaPage(),
                   ],
                 ),
               ),

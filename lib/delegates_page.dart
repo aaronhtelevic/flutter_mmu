@@ -29,11 +29,11 @@ class DelegateDataSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-class Delegates extends StatefulWidget {
-  const Delegates({super.key});
+class DelegatesPage extends StatefulWidget {
+  const DelegatesPage({super.key});
 
   @override
-  State<Delegates> createState() => _DelegatesState();
+  State<DelegatesPage> createState() => _DelegatesPageState();
 }
 
 class DelegateTable extends StatelessWidget {
@@ -58,7 +58,7 @@ class DelegateTable extends StatelessWidget {
   }
 }
 
-class _DelegatesState extends State<Delegates> {
+class _DelegatesPageState extends State<DelegatesPage> {
   Future<List<Delegate>>? _futureDelegates;
 
   Future<String> loadAsset(String path) async {

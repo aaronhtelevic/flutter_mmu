@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class Agenda extends StatefulWidget {
-  const Agenda({super.key});
+class AgendaPage extends StatefulWidget {
+  const AgendaPage({super.key});
 
   @override
-  State<Agenda> createState() => _AgendaState();
+  State<AgendaPage> createState() => _AgendaPageState();
 }
 
-class _AgendaState extends State<Agenda> {
+class _AgendaPageState extends State<AgendaPage> {
   final _channel = WebSocketChannel.connect(
     Uri.parse('ws://localhost:7682/agenda'),
   );
