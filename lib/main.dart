@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mmu/agenda_page.dart';
 import 'package:flutter_mmu/delegates_page.dart';
-import 'package:flutter_mmu/header.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -53,9 +53,15 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               Row(spacing: 8, children: [
-                TextButton(onPressed: () {}, child: Text('Font Size')),
-                TextButton(onPressed: () {}, child: Text('Volume')),
-                TextButton(onPressed: () {}, child: Text('Channel')),
+                IconButton(
+                    onPressed: () async {
+                      // do system call `systemctl stop flutter_mmu; systemctl restart mmu-gui`
+                      await Process.run('sh', [
+                        '-c',
+                        'systemctl restart mmu-gui; systemctl stop flutter_mmu'
+                      ]);
+                    },
+                    icon: Icon(Icons.flight_takeoff)),
               ])
             ],
           ),
