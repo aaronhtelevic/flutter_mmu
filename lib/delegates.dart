@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 import 'package:flutter_mmu/types/delegate.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class Delegates extends StatefulWidget {
   const Delegates({super.key});
@@ -45,9 +46,9 @@ class DelegateTable extends StatelessWidget {
 }
 
 class _DelegatesState extends State<Delegates> {
-  final _channel = WebSocketChannel.connect(
-    Uri.parse('ws://localhost:7682'),
-  );
+  Future<String> loadAsset(String path) async {
+    return await rootBundle.loadString(path);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +65,14 @@ class _DelegatesState extends State<Delegates> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            StreamBuilder(
-              stream: _channel.stream,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  if (snapshot.error is WebSocketException) {
-                    WebSocketException e = snapshot.error as WebSocketException;
-                    return Text('WSE Error: ${e.message}');
-                  }
-
+            FutureBuilder<String>(
+              future: loadAsset('assets/delegates.json'),
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
+                } else {
                   final delegates = _parseDelegates(snapshot.data);
                   if (delegates != null) {
                     return SizedBox(
@@ -86,11 +84,9 @@ class _DelegatesState extends State<Delegates> {
                   } else {
                     return const Text('');
                   }
-                } else {
-                  return const Text('Loading delegates...');
                 }
               },
-            )
+            ),
           ],
         ),
       ),
