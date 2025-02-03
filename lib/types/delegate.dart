@@ -1,3 +1,145 @@
+class DelegateComm {
+  String nam = 'delinfo';
+  List<Group> groups;
+  List<Delegate> delegates;
+  List<Unit> units;
+
+  DelegateComm({
+    required this.groups,
+    required this.delegates,
+    required this.units,
+  });
+
+  factory DelegateComm.fromJson(Map<String, dynamic> json) {
+    return DelegateComm(
+      groups: List<Group>.from(json['g'].map((group) => Group.fromJson(group))),
+      delegates: List<Delegate>.from(
+          json['d'].map((delegate) => Delegate.fromJson(delegate))),
+      units: List<Unit>.from(json['u'].map((unit) => Unit.fromJson(unit))),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nam': nam,
+      'g': groups.map((group) => group.toJson()).toList(),
+      'd': delegates.map((delegate) => delegate.toJson()).toList(),
+      'u': units.map((unit) => unit.toJson()).toList(),
+    };
+  }
+}
+
+class Unit {
+  String id;
+  String nam;
+  int stat;
+  String del;
+
+  Unit({
+    required this.id,
+    required this.nam,
+    required this.stat,
+    required this.del,
+  });
+
+  factory Unit.fromJson(Map<String, dynamic> json) {
+    return Unit(
+      id: json['id'],
+      nam: json['nam'],
+      stat: json['stat'],
+      del: json['del'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nam': nam,
+      'stat': stat,
+      'del': del,
+    };
+  }
+}
+
+class GroupNam {
+  List<String> lang;
+  List<String> val;
+
+  GroupNam({
+    required this.lang,
+    required this.val,
+  });
+
+  factory GroupNam.fromJson(Map<String, dynamic> json) {
+    return GroupNam(
+      lang: List<String>.from(json['lang']),
+      val: List<String>.from(json['val']),
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'lang': lang,
+      'val': val,
+    };
+  }
+}
+
+class Group {
+  String id;
+  String col;
+  GroupNam nam;
+  List<String> del;
+  String pic;
+  int remst;
+  int totst;
+  int warst;
+  bool enst;
+  bool downst;
+
+  Group({
+    required this.id,
+    required this.col,
+    required this.nam,
+    required this.del,
+    required this.pic,
+    required this.remst,
+    required this.totst,
+    required this.warst,
+    required this.enst,
+    required this.downst,
+  });
+
+  factory Group.fromJson(Map<String, dynamic> json) {
+    return Group(
+      id: json['id'],
+      col: json['col'],
+      nam: GroupNam.fromJson(json['nam']),
+      del: List<String>.from(json['del']),
+      pic: json['pic'],
+      remst: json['remst'],
+      totst: json['totst'],
+      warst: json['warst'],
+      enst: json['enst'],
+      downst: json['downst'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'col': col,
+      'nam': nam.toJson(),
+      'del': del,
+      'pic': pic,
+      'remst': remst,
+      'totst': totst,
+      'warst': warst,
+      'enst': enst,
+      'downst': downst,
+    };
+  }
+}
+
 class Delegate {
   String id;
   String nam;

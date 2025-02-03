@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
@@ -66,6 +68,11 @@ class _DelegatesState extends State<Delegates> {
               stream: _channel.stream,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
+                  if (snapshot.error is WebSocketException) {
+                    WebSocketException e = snapshot.error as WebSocketException;
+                    return Text('WSE Error: ${e.message}');
+                  }
+
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
                   final delegates = _parseDelegates(snapshot.data);
@@ -95,9 +102,8 @@ class _DelegatesState extends State<Delegates> {
     try {
       final jsonData = jsonDecode(data);
       if (jsonData['nam'] == 'delinfo') {
-        return (jsonData['d'] as List)
-            .map((delegateJson) => Delegate.fromJson(delegateJson))
-            .toList();
+        DelegateComm delegateComm = DelegateComm.fromJson(jsonData);
+        return delegateComm.delegates;
       }
     } catch (e) {
       print('Error parsing JSON: $e');
