@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 import 'package:flutter_mmu/types/delegate.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -75,10 +72,7 @@ class _DelegatesState extends State<Delegates> {
                 } else {
                   final delegates = _parseDelegates(snapshot.data);
                   if (delegates != null) {
-                    double screenHeight = MediaQuery.of(context).size.height;
-                    return SizedBox(
-                      height: screenHeight *
-                          0.5, // Set the height to 50% of the screen height
+                    return Expanded(
                       child: SingleChildScrollView(
                         child: DelegateTable(delegates: delegates),
                       ),

@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
         theme: ThemeData(
           // This is the theme of your application.
           //
@@ -37,21 +36,26 @@ class MyApp extends StatelessWidget {
         home: DefaultTabController(
           length: 2,
           child: Scaffold(
-            appBar: AppBar(
-              bottom: const TabBar(
-                tabs: [
-                  Tab(text: 'Delegates'),
-                  Tab(text: 'Agenda'),
-                ],
-              ),
-            ),
-            body: const TabBarView(
+            body: Column(
               children: [
-                Delegates(),
-                Agenda(),
+                const TabBar(
+                  tabs: [
+                    Tab(text: 'Delegates'),
+                    Tab(text: 'Agenda'),
+                  ],
+                ),
+                Expanded(
+                  child: const TabBarView(
+                    children: [
+                      Delegates(),
+                      Agenda(),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-        ));
+        ),
+    );
   }
 }
