@@ -3,6 +3,32 @@ import 'dart:convert';
 import 'package:flutter_mmu/types/delegate.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+class DelegateDataSource extends DataTableSource {
+  final List<Delegate> delegates;
+
+  DelegateDataSource(this.delegates);
+
+  @override
+  DataRow getRow(int index) {
+    final delegate = delegates[index];
+    return DataRow(
+      cells: <DataCell>[
+        DataCell(Text(delegate.fnam)),
+        DataCell(Text(delegate.nam)),
+      ],
+    );
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => delegates.length;
+
+  @override
+  int get selectedRowCount => 0;
+}
+
 class Delegates extends StatefulWidget {
   const Delegates({super.key});
 
@@ -17,34 +43,38 @@ class DelegateTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final delegateDataSource = DelegateDataSource(delegates);
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: DataTable(
-          columns: const <DataColumn>[
-            DataColumn(label: Text('First Name')),
-            DataColumn(label: Text('Last Name')),
-            DataColumn(label: Text('Username')),
-          ],
-          rows: delegates.map((Delegate delegate) {
-            return DataRow(
-              cells: <DataCell>[
-                DataCell(Text(delegate.fnam)),
-                DataCell(Text(delegate.nam)),
-                DataCell(Text(delegate.unam ?? "")),
-              ],
-            );
-          }).toList(),
-        ),
+      scrollDirection: Axis.vertical,
+      child: PaginatedDataTable(
+        columns: const <DataColumn>[
+          DataColumn(label: Text('First Name')),
+          DataColumn(label: Text('Last Name')),
+        ],
+        source: delegateDataSource,
+        rowsPerPage: 60,
       ),
     );
   }
 }
 
 class _DelegatesState extends State<Delegates> {
+  Future<List<Delegate>>? _futureDelegates;
+
   Future<String> loadAsset(String path) async {
     return await rootBundle.loadString(path);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _futureDelegates = loadDelegates();
+  }
+
+  Future<List<Delegate>> loadDelegates() async {
+    final String jsonString =
+        await rootBundle.loadString('assets/delegates.json');
+    return _parseDelegates(jsonString) ?? [];
   }
 
   @override
@@ -59,23 +89,22 @@ class _DelegatesState extends State<Delegates> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FutureBuilder<String>(
-              future: loadAsset('assets/delegates.json'),
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            FutureBuilder<List<Delegate>>(
+              future: _futureDelegates,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Delegate>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  final delegates = _parseDelegates(snapshot.data);
-                  if (delegates != null) {
+                  if (snapshot.data != null) {
                     return Expanded(
-                      child: SingleChildScrollView(
-                        child: DelegateTable(delegates: delegates),
-                      ),
+                      flex: 1,
+                      child: DelegateTable(delegates: snapshot.data!),
                     );
                   } else {
                     return const Text('');
@@ -83,6 +112,7 @@ class _DelegatesState extends State<Delegates> {
                 }
               },
             ),
+            Flexible(flex: 2, child: Container())
           ],
         ),
       ),
