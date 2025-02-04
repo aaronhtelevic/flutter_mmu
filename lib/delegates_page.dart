@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 import 'package:flutter_mmu/delegate_widget.dart';
 import 'dart:convert';
 import 'package:flutter_mmu/types/delegate.dart';
@@ -13,6 +14,12 @@ class DelegatesPage extends StatefulWidget {
 
 class _DelegatesPageState extends State<DelegatesPage> {
   Future<List<Delegate>>? _futureDelegates;
+  // True if shift enabled.
+  bool shiftEnabled = false;
+
+  // is true will show the numeric keyboard.
+  bool isNumericMode = false;
+  bool _showKeyboard = false;
 
   String _searchText = '';
   final TextEditingController _searchController = TextEditingController();
@@ -68,10 +75,26 @@ class _DelegatesPageState extends State<DelegatesPage> {
     // than having to individually change instances of widgets.
     return Column(
       children: [
-        Container(
-          margin: const EdgeInsets.all(10),
-          child: SearchBar(
-              hintText: "Search delegates", controller: _searchController),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: SearchBar(
+                  hintText: "Search delegates", controller: _searchController),
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _showKeyboard = !_showKeyboard;
+                });
+              },
+              icon: Icon(
+                _showKeyboard ? Icons.keyboard_hide : Icons.keyboard,
+              ),
+              color: Colors.grey,
+            ),
+          ],
         ),
         Expanded(
           child: FutureBuilder<List<Delegate>>(
@@ -102,10 +125,30 @@ class _DelegatesPageState extends State<DelegatesPage> {
               }
             },
           ),
-        )
+        ),
+        if (_showKeyboard)
+          Container(
+              color: Colors.grey,
+              child: VirtualKeyboard(
+                height: 300,
+                //width: 500,
+                textColor: Colors.white,
+                textController: _searchController,
+                //customLayoutKeys: _customLayoutKeys,
+                defaultLayouts: [
+                  VirtualKeyboardDefaultLayouts.English,
+                  VirtualKeyboardDefaultLayouts.Arabic,
+                ],
+                //reverseLayout :true,
+                type: VirtualKeyboardType.Alphanumeric,
+              )
+              // postKeyPress: _onKeyPress),
+              )
       ],
     );
   }
+
+  /// Fired when the virtual keyboard key is pressed.
 
   List<Delegate>? _parseDelegates(String? data) {
     if (data == null) return null;
