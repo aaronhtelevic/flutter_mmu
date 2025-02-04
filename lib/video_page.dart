@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:file_picker/file_picker.dart';
 import 'dart:io' as io;
-import 'dart:typed_data';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class VideoPage extends StatefulWidget {
   const VideoPage({Key? key}) : super(key: key);
@@ -21,18 +18,13 @@ class _VideoPageState extends State<VideoPage> {
   }
 
   Future<void> _pickVideo() async {
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(type: FileType.video);
+    io.File file = io.File('/home/root/video1.mp4');
 
-    if (result != null) {
-      // For mobile, use path
-      io.File file = io.File(result.files.single.path!);
-      _controller = VideoPlayerController.file(file);
+    _controller = VideoPlayerController.file(file);
 
-      await _controller!.initialize();
-      setState(() {});
-      _controller!.play();
-    }
+    await _controller!.initialize();
+    setState(() {});
+    _controller!.play();
   }
 
   @override
