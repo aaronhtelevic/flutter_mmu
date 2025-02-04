@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mmu/agenda_page.dart';
 import 'package:flutter_mmu/home_page.dart';
+import 'package:flutter_mmu/video_page.dart';
 import 'package:flutter_mmu/delegates_page.dart';
 import 'dart:io';
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           body: Column(
             children: [
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
                   Tab(text: 'Home'),
                   Tab(text: 'Delegates'),
                   Tab(text: 'Agenda'),
+                  Tab(text: 'Movie'),
                 ],
               ),
               Expanded(
@@ -52,6 +54,7 @@ class MyApp extends StatelessWidget {
                     HomePage(),
                     DelegatesPage(),
                     AgendaPage(),
+                    VideoPage(),
                   ],
                 ),
               ),
