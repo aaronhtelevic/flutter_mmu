@@ -103,7 +103,7 @@ class _DelegatesPageState extends State<DelegatesPage> {
                 } else {
                   if (snapshot.data != null) {
                     return Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: DelegateTable(delegates: snapshot.data!),
                     );
                   } else {
