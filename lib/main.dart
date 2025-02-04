@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mmu/agenda_page.dart';
+import 'package:flutter_mmu/home_page.dart';
 import 'package:flutter_mmu/delegates_page.dart';
 import 'dart:io';
 
@@ -34,12 +35,13 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           body: Column(
             children: [
               const TabBar(
                 tabs: [
+                  Tab(text: 'Home'),
                   Tab(text: 'Delegates'),
                   Tab(text: 'Agenda'),
                 ],
@@ -47,6 +49,7 @@ class MyApp extends StatelessWidget {
               Expanded(
                 child: const TabBarView(
                   children: [
+                    HomePage(),
                     DelegatesPage(),
                     AgendaPage(),
                   ],
