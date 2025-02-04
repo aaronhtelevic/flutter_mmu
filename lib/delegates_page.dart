@@ -14,6 +14,11 @@ class DelegatesPage extends StatefulWidget {
 class _DelegatesPageState extends State<DelegatesPage> {
   Future<List<Delegate>>? _futureDelegates;
 
+  String _searchText = '';
+  final TextEditingController _searchController = TextEditingController();
+
+  List<Delegate> _allDelegates = [];
+
   Future<String> loadAsset(String path) async {
     return await rootBundle.loadString(path);
   }
@@ -21,13 +26,36 @@ class _DelegatesPageState extends State<DelegatesPage> {
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(() {
+      setState(() {
+        _searchText = _searchController.text;
+      });
+    });
     _futureDelegates = loadDelegates();
   }
 
   Future<List<Delegate>> loadDelegates() async {
     final String jsonString =
         await rootBundle.loadString('assets/delegates.json');
-    return _parseDelegates(jsonString) ?? [];
+    _allDelegates = _parseDelegates(jsonString) ?? [];
+    return _allDelegates;
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<Delegate> _filterDelegates() {
+    if (_searchText.isEmpty) {
+      return _allDelegates;
+    } else {
+      return _allDelegates
+          .where((delegate) =>
+              delegate.fnam.toLowerCase().contains(_searchText.toLowerCase()))
+          .toList();
+    }
   }
 
   @override
@@ -38,38 +66,44 @@ class _DelegatesPageState extends State<DelegatesPage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: FutureBuilder<List<Delegate>>(
-          future: _futureDelegates,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Delegate>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              if (snapshot.data != null) {
-                final delegates = snapshot.data!;
-                return GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 5, // Adjust the aspect ratio as needed
-                  ),
-                  itemCount: delegates.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return DelegateWidget(delegate: delegates[index]);
-                  },
-                );
-              } else {
-                return const Text('');
-              }
-            }
-          },
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.all(10),
+          child: SearchBar(
+              hintText: "Search delegates", controller: _searchController),
         ),
-      ),
+        Expanded(
+          child: FutureBuilder<List<Delegate>>(
+            future: _futureDelegates,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Delegate>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                if (snapshot.data != null) {
+                  final delegates = _filterDelegates();
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 5, // Adjust the aspect ratio as needed
+                    ),
+                    itemCount: delegates.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return DelegateWidget(delegate: delegates[index]);
+                    },
+                  );
+                } else {
+                  return const Text('');
+                }
+              }
+            },
+          ),
+        )
+      ],
     );
   }
 
