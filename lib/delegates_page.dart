@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mmu/delegate_widget.dart';
 import 'dart:convert';
 import 'package:flutter_mmu/types/delegate.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -89,31 +90,32 @@ class _DelegatesPageState extends State<DelegatesPage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            FutureBuilder<List<Delegate>>(
-              future: _futureDelegates,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<Delegate>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  if (snapshot.data != null) {
-                    return Expanded(
-                      flex: 2,
-                      child: DelegateTable(delegates: snapshot.data!),
-                    );
-                  } else {
-                    return const Text('');
-                  }
-                }
-              },
-            ),
-            Flexible(flex: 2, child: Container())
-          ],
+        child: FutureBuilder<List<Delegate>>(
+          future: _futureDelegates,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Delegate>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              if (snapshot.data != null) {
+                final delegates = snapshot.data!;
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 5, // Adjust the aspect ratio as needed
+                  ),
+                  itemCount: delegates.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return DelegateWidget(delegate: delegates[index]);
+                  },
+                );
+              } else {
+                return const Text('');
+              }
+            }
+          },
         ),
       ),
     );
