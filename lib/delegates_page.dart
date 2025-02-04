@@ -4,59 +4,11 @@ import 'dart:convert';
 import 'package:flutter_mmu/types/delegate.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-class DelegateDataSource extends DataTableSource {
-  final List<Delegate> delegates;
-
-  DelegateDataSource(this.delegates);
-
-  @override
-  DataRow getRow(int index) {
-    final delegate = delegates[index];
-    return DataRow(
-      cells: <DataCell>[
-        DataCell(Text(delegate.fnam)),
-        DataCell(Text(delegate.nam)),
-      ],
-    );
-  }
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get rowCount => delegates.length;
-
-  @override
-  int get selectedRowCount => 0;
-}
-
 class DelegatesPage extends StatefulWidget {
   const DelegatesPage({super.key});
 
   @override
   State<DelegatesPage> createState() => _DelegatesPageState();
-}
-
-class DelegateTable extends StatelessWidget {
-  final List<Delegate> delegates;
-
-  const DelegateTable({super.key, required this.delegates});
-
-  @override
-  Widget build(BuildContext context) {
-    final delegateDataSource = DelegateDataSource(delegates);
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: PaginatedDataTable(
-        columns: const <DataColumn>[
-          DataColumn(label: Text('First Name')),
-          DataColumn(label: Text('Last Name')),
-        ],
-        source: delegateDataSource,
-        rowsPerPage: 60,
-      ),
-    );
-  }
 }
 
 class _DelegatesPageState extends State<DelegatesPage> {
