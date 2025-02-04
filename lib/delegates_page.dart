@@ -78,21 +78,28 @@ class _DelegatesPageState extends State<DelegatesPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: SearchBar(
-                  hintText: "Search delegates", controller: _searchController),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _showKeyboard = !_showKeyboard;
-                });
-              },
-              icon: Icon(
-                _showKeyboard ? Icons.keyboard_hide : Icons.keyboard,
+            Flexible(
+              flex: 1,
+              child: Container(
+                margin: const EdgeInsets.all(10),
+                child: SearchBar(
+                    hintText: "Search delegates",
+                    controller: _searchController),
               ),
-              color: Colors.grey,
+            ),
+            Flexible(
+              flex: 1,
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _showKeyboard = !_showKeyboard;
+                  });
+                },
+                icon: Icon(
+                  _showKeyboard ? Icons.keyboard_hide : Icons.keyboard,
+                ),
+                color: Colors.grey,
+              ),
             ),
           ],
         ),
