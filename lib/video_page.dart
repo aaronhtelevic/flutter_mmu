@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterpi_gstreamer_video_player/flutterpi_gstreamer_video_player.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:io' as io;
 
@@ -18,9 +19,10 @@ class _VideoPageState extends State<VideoPage> {
   }
 
   Future<void> _pickVideo() async {
-    io.File file = io.File('/home/root/video1.mp4');
+    // io.File file = io.File('/home/root/video1.mp4');
 
-    _controller = VideoPlayerController.file(file);
+    _controller = FlutterpiVideoPlayerController.withGstreamerPipeline(
+        'videotestsrc ! timeoverlay halignment=right valignment=top text="Time: " shaded-background=true ! queue ! appsink name="sink"');
 
     await _controller!.initialize();
     setState(() {});
