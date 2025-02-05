@@ -19,8 +19,9 @@ class _VideoPageState extends State<VideoPage> {
   }
 
   Future<void> _pickVideo() async {
-    io.File file = io.File('/home/root/video1.mp4');
-    _controller = VideoPlayerController.file(file);
+    // io.File file = io.File('/home/root/video1.mp4');
+    _controller = FlutterpiVideoPlayerController.withGstreamerPipeline(
+        'filesrc location=/home/root/video1.mp4 ! decodebin ! videoscale ! videoconvert ! video/x-raw,width=1280,height=720 ! appsink name="sink"');
 
     await _controller!.initialize();
     setState(() {});
@@ -45,9 +46,6 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Video Player'),
-      ),
       body: Column(children: [
         Flexible(
             flex: 5,
@@ -84,9 +82,7 @@ class _VideoPageState extends State<VideoPage> {
               icon: Icon(Icons.movie),
               onPressed: () {
                 setState(() {
-                  _controller!.pause();
                   _controller!.dispose();
-
                   _pickVideo();
                 });
               },
@@ -95,9 +91,7 @@ class _VideoPageState extends State<VideoPage> {
               icon: Icon(Icons.camera),
               onPressed: () {
                 setState(() {
-                  _controller!.pause();
                   _controller!.dispose();
-
                   _pickTestSource();
                 });
               },
@@ -105,20 +99,6 @@ class _VideoPageState extends State<VideoPage> {
           ]),
         )
       ]),
-      floatingActionButton: _controller != null
-          ? FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  _controller!.value.isPlaying
-                      ? _controller!.pause()
-                      : _controller!.play();
-                });
-              },
-              child: Icon(
-                _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              ),
-            )
-          : null,
     );
   }
 }
