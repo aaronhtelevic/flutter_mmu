@@ -5,7 +5,10 @@ import 'package:flutter_mmu/video_page.dart';
 import 'package:flutter_mmu/delegates_page.dart';
 import 'dart:io';
 
+import 'package:flutterpi_gstreamer_video_player/flutterpi_gstreamer_video_player.dart';
+
 void main() {
+  FlutterpiVideoPlayer.registerWith();
   runApp(const MyApp());
 }
 
