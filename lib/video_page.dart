@@ -19,10 +19,17 @@ class _VideoPageState extends State<VideoPage> {
   }
 
   Future<void> _pickVideo() async {
-    // io.File file = io.File('/home/root/video1.mp4');
+    io.File file = io.File('/home/root/video1.mp4');
+    _controller = VideoPlayerController.file(file);
 
+    await _controller!.initialize();
+    setState(() {});
+    _controller!.play();
+  }
+
+  Future<void> _pickTestSource() async {
     _controller = FlutterpiVideoPlayerController.withGstreamerPipeline(
-        'videotestsrc ! timeoverlay halignment=right valignment=top text="Time: " shaded-background=true ! queue ! appsink name="sink"');
+        'videotestsrc ! videoconvert ! videoscale ! appsink name="sink"');
 
     await _controller!.initialize();
     setState(() {});
@@ -41,14 +48,63 @@ class _VideoPageState extends State<VideoPage> {
       appBar: AppBar(
         title: Text('Video Player'),
       ),
-      body: Center(
-        child: _controller != null && _controller!.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: _controller!.value.aspectRatio,
-                child: VideoPlayer(_controller!),
-              )
-            : CircularProgressIndicator(),
-      ),
+      body: Column(children: [
+        Flexible(
+            flex: 5,
+            child: Center(
+              child: _controller != null && _controller!.value.isInitialized
+                  ? AspectRatio(
+                      aspectRatio: _controller!.value.aspectRatio,
+                      child: VideoPlayer(_controller!),
+                    )
+                  : CircularProgressIndicator(),
+            )),
+        Flexible(
+          flex: 1,
+          child: Row(children: [
+            IconButton(
+              icon: Icon(Icons.skip_previous),
+              onPressed: () {
+                _controller!.seekTo(Duration.zero);
+              },
+            ),
+            IconButton(
+              icon: Icon(_controller!.value.isPlaying
+                  ? Icons.pause
+                  : Icons.play_arrow),
+              onPressed: () {
+                setState(() {
+                  _controller!.value.isPlaying
+                      ? _controller!.pause()
+                      : _controller!.play();
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.movie),
+              onPressed: () {
+                setState(() {
+                  _controller!.pause();
+                  _controller!.dispose();
+
+                  _pickVideo();
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.camera),
+              onPressed: () {
+                setState(() {
+                  _controller!.pause();
+                  _controller!.dispose();
+
+                  _pickTestSource();
+                });
+              },
+            ),
+          ]),
+        )
+      ]),
       floatingActionButton: _controller != null
           ? FloatingActionButton(
               onPressed: () {
