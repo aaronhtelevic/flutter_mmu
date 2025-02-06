@@ -10,6 +10,7 @@ import 'package:flutterpi_gstreamer_video_player/flutterpi_gstreamer_video_playe
 void main() {
   FlutterpiVideoPlayer.registerWith();
   runApp(const MyApp());
+  print('Platform: ${Platform.operatingSystem}');
 }
 
 class MyApp extends StatelessWidget {
