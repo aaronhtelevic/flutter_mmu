@@ -109,7 +109,7 @@ class _DelegatesPageState extends State<DelegatesPage> {
             builder:
                 (BuildContext context, AsyncSnapshot<List<Delegate>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
