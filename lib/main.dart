@@ -62,17 +62,6 @@ class MyApp extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(spacing: 8, children: [
-                IconButton(
-                    onPressed: () async {
-                      // do system call `systemctl stop flutter_mmu; systemctl restart mmu-gui`
-                      await Process.run('sh', [
-                        '-c',
-                        'systemctl restart mmu-gui; systemctl stop flutter_mmu'
-                      ]);
-                    },
-                    icon: Icon(Icons.flight_takeoff)),
-              ])
             ],
           ),
         ),
