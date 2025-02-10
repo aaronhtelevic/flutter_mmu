@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'types/agenda.dart';

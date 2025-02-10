@@ -264,14 +264,14 @@ packages:
   video_player_linux:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "49a7b2f28fbcb51d249797ac3a1bd13e58d611f8"
-      url: "https://github.com/meta-flutter/video_player_linux.git"
+      path: "packages/video_player/video_player_linux"
+      ref: main
+      resolved-ref: "6563418bb07164550e38d3a64b676958d78a961c"
+      url: "https://github.com/toyota-connected/tcna-packages.git"
     source: git
     version: "2.5.0"
   video_player_platform_interface:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: video_player_platform_interface
       sha256: df534476c341ab2c6a835078066fc681b8265048addd853a1e3c78740316a844
