@@ -21,8 +21,7 @@ class _VideoPageState extends State<VideoPage> {
     // io.File file = io.File('/home/root/video1.mp4');
     // _controller = FlutterpiVideoPlayerController.withGstreamerPipeline(
     //     'filesrc location=/home/root/video1.mp4 ! decodebin ! videoscale ! videoconvert ! video/x-raw,width=1280,height=720 ! appsink name="sink"');
-    _controller =
-        VideoPlayerController.networkUrl(Uri.parse("/home/root/video1.mp4"));
+    _controller = VideoPlayerController.asset("assets/sample.mp4");
 
     await _controller!.initialize();
     setState(() {});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mmu/agenda_page.dart';
 import 'package:flutter_mmu/home_page.dart';
-import 'package:flutter_mmu/video_page.dart';
+import 'package:flutter_mmu/video_example.dart';
 import 'package:flutter_mmu/delegates_page.dart';
 import 'dart:io';
 
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
                     HomePage(),
                     DelegatesPage(),
                     AgendaPage(),
-                    VideoPage(),
+                    VideoExamplePage(),
                   ],
                 ),
               ),
