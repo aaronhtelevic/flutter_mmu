@@ -38,11 +38,10 @@ class _VideoPageState extends State<VideoPage> {
     }
 
     _controller = VideoPlayerController.file(file);
-
-    await _controller!.initialize();
-    print('Video duration: ${_controller!.value.duration}');
-    setState(() {});
-    _controller!.play();
+    _controller!.initialize().then((_) {
+      setState(() {});
+      _controller!.play();
+    });
   }
 
   @override

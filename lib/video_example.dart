@@ -23,7 +23,12 @@ class VideoExamplePageState extends State<VideoExamplePage> {
   @override
   void initState() {
     super.initState();
-    File file = File('/home/root/video1.mp4');
+    late File file;
+    if (File("/home/root/video1.mp4").existsSync()) {
+      file = File("/home/root/video1.mp4");
+    } else {
+      file = File("/home/aaron/video1.mp4");
+    }
     _controller = MiniController.file(file);
 
     _controller.addListener(() {
@@ -49,7 +54,6 @@ class VideoExamplePageState extends State<VideoExamplePage> {
           Container(
             padding: const EdgeInsets.only(top: 20.0),
           ),
-          const Text('With assets mp4'),
           Container(
             padding: const EdgeInsets.all(20),
             child: AspectRatio(

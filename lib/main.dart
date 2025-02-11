@@ -3,6 +3,7 @@ import 'package:flutter_mmu/agenda_page.dart';
 import 'package:flutter_mmu/home_page.dart';
 // import 'package:flutter_mmu/video_example.dart';
 import 'package:flutter_mmu/delegates_page.dart';
+import 'package:flutter_mmu/video_example.dart';
 import 'package:flutter_mmu/video_page.dart';
 import 'dart:io';
 
@@ -56,12 +57,14 @@ class MyApp extends StatelessWidget {
                 ],
               ),
               Expanded(
-                child: const TabBarView(
+                child: TabBarView(
                   children: [
                     HomePage(),
                     DelegatesPage(),
                     AgendaPage(),
-                    VideoPage(),
+                    Platform.environment['FLUTTER_PI'] == '1'
+                        ? VideoPage()
+                        : VideoExamplePage(),
                   ],
                 ),
               ),
