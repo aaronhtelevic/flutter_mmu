@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutterpi_gstreamer_video_player/flutterpi_gstreamer_video_player.dart';
 import 'package:video_player/video_player.dart';
-import 'dart:io' as io;
 
 class VideoPage extends StatefulWidget {
   const VideoPage({Key? key}) : super(key: key);
@@ -17,13 +19,28 @@ class _VideoPageState extends State<VideoPage> {
     _pickVideo();
   }
 
-  Future<void> _pickVideo() async {
-    // io.File file = io.File('/home/root/video1.mp4');
-    // _controller = FlutterpiVideoPlayerController.withGstreamerPipeline(
-    //     'filesrc location=/home/root/video1.mp4 ! decodebin ! videoscale ! videoconvert ! video/x-raw,width=1280,height=720 ! appsink name="sink"');
-    _controller = VideoPlayerController.asset("assets/sample.mp4");
+  Future<void> _pickGstreamer() async {
+    _controller = FlutterpiVideoPlayerController.withGstreamerPipeline(
+        'videotestsrc ! queue ! appsink name="sink"');
 
     await _controller!.initialize();
+    setState(() {});
+    _controller!.play();
+  }
+
+  Future<void> _pickVideo() async {
+    late File file;
+
+    if (File("/home/root/video1.mp4").existsSync()) {
+      file = File("/home/root/video1.mp4");
+    } else {
+      file = File("/home/aaron/video1.mp4");
+    }
+
+    _controller = VideoPlayerController.file(file);
+
+    await _controller!.initialize();
+    print('Video duration: ${_controller!.value.duration}');
     setState(() {});
     _controller!.play();
   }
@@ -75,6 +92,15 @@ class _VideoPageState extends State<VideoPage> {
                 setState(() {
                   _controller!.dispose();
                   _pickVideo();
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.camera),
+              onPressed: () {
+                setState(() {
+                  _controller!.dispose();
+                  _pickGstreamer();
                 });
               },
             ),

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mmu/agenda_page.dart';
 import 'package:flutter_mmu/home_page.dart';
-import 'package:flutter_mmu/video_example.dart';
+// import 'package:flutter_mmu/video_example.dart';
 import 'package:flutter_mmu/delegates_page.dart';
+import 'package:flutter_mmu/video_page.dart';
 import 'dart:io';
 
-// import 'package:flutterpi_gstreamer_video_player/flutterpi_gstreamer_video_player.dart';
+import 'package:flutterpi_gstreamer_video_player/flutterpi_gstreamer_video_player.dart';
 
 void main() {
-  // FlutterpiVideoPlayer.registerWith();
+  String flutterPi = Platform.environment['FLUTTER_PI'] ?? '0';
+  if (flutterPi == '1') {
+    FlutterpiVideoPlayer.registerWith();
+  }
   runApp(const MyApp());
-  print('Platform: ${Platform.operatingSystem}');
 }
 
 class MyApp extends StatelessWidget {
@@ -58,7 +61,7 @@ class MyApp extends StatelessWidget {
                     HomePage(),
                     DelegatesPage(),
                     AgendaPage(),
-                    VideoExamplePage(),
+                    VideoPage(),
                   ],
                 ),
               ),
